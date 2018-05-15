@@ -47,3 +47,22 @@ func TestIndexHandler(t *testing.T) {
 		t.Errorf("Status is not OK: %d", res.Code)
 	}
 }
+
+func TestHealthCheckHandler(t *testing.T) {
+	inst, err := aetest.NewInstance(nil)
+	if err != nil {
+		t.Fatalf("Failed to create instance: %v", err)
+	}
+	defer inst.Close()
+
+	url := "/healthcheck"
+	req, err := inst.NewRequest("GET", url, nil)
+	if err != nil {
+		t.Fatalf("Failed to create request: %v", err)
+	}
+	res := httptest.NewRecorder()
+	HealthCheckHandler(res, req, nil)
+	if res.Code != http.StatusNoContent {
+		t.Errorf("Status is not StatusNoContent: %d", res.Code)
+	}
+}

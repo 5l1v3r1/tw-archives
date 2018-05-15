@@ -16,3 +16,8 @@ func HandleNotFound(w http.ResponseWriter, r *http.Request) {
 func IndexHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.WriteHeader(200)
 }
+
+// HealthCheckHandler provides healthcheck page.
+func HealthCheckHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	w.WriteHeader(http.StatusNoContent)
+}
