@@ -1,0 +1,27 @@
+runtime: go
+api_version: go1
+
+handlers:
+- url: /robots.txt
+  static_files: static/robots.txt
+  upload: static/robots.txt
+  secure: always
+- url: /static
+  static_dir: static
+  secure: always
+  login: admin
+- url: /healthcheck
+  script: _go_app
+  secure: always
+- url: /.*
+  script: _go_app
+  secure: always
+  login: admin
+
+nobuild_files: vendor/
+
+skip_files:
+- Gopkg\.toml
+- Gopkg\.lock
+- \.gitignore
+- vendor/.*$
