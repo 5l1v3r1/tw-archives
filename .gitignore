@@ -15,4 +15,5 @@ appengine-generated/
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
-
+# dep
+vendor/
