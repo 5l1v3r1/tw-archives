@@ -25,3 +25,5 @@ skip_files:
 - Gopkg\.lock
 - \.gitignore
 - vendor/.*$
+- LICENSE
+- README\.md
