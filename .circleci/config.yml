@@ -1,0 +1,101 @@
+version: 2
+
+defaults: &defaults
+   working_directory: ~/src/github.com/ryu22e/tw-archives
+
+jobs:
+   build:
+     <<: *defaults
+     docker:
+       - image: circleci/golang:1.8
+     steps:
+       - attach_workspace:
+          at: ~/src/github.com/ryu22e/tw-archives
+       - run:
+          name: Install dep
+          command: |
+            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+       - run:
+          name: dep install
+          command: |
+            export GOPATH="/go:${HOME}"
+            cd ~/src/github.com/ryu22e/tw-archives
+            dep ensure
+            cp -R vendor/* /go/src
+       - save_cache:
+           key: go-src-{{ arch }}-{{ .Revision }}
+           paths:
+             - /go/src
+   test:
+     <<: *defaults
+     docker:
+       - image: google/cloud-sdk:alpine
+     steps:
+       - run:
+          name: Install git openssh-client tar
+          command: apk --update -q add git openssh-client tar
+       - attach_workspace:
+          at: ~/src/github.com/ryu22e/tw-archives
+       - restore_cache:
+          keys:
+            - go-src-{{ arch }}-{{ .Revision }}
+       - run:
+          name: Install app-engine-go
+          command: |
+            gcloud components install -q app-engine-go
+       - run:
+          name: goapp test
+          command: |
+            cd ~/src/github.com/ryu22e/tw-archives
+            export GOROOT=/google-cloud-sdk/platform/google_appengine/goroot-1.8
+            export GOPATH="/go:${HOME}"
+            export PATH=${PATH}:${GOROOT}/bin:/go/bin
+            goapp test
+   deploy:
+     <<: *defaults
+     docker:
+       - image: google/cloud-sdk:alpine
+     steps:
+       - attach_workspace:
+          at: ~/src/github.com/ryu22e/tw-archives
+       - run:
+          name: Install git openssh-client tar
+          command: apk --update -q add git openssh-client tar
+       - restore_cache:
+          keys:
+            - tw-archives-{{ arch }}-{{ .Revision }}
+            - go-src-{{ arch }}-{{ .Revision }}
+       - run:
+          name: Setup Google Cloud SDK
+          command: |
+            echo $GCLOUD_API_KEYFILE | base64 -d > ~/gcloud-api-key.json
+            gcloud auth activate-service-account --key-file ~/gcloud-api-key.json
+            gcloud config set project $GCLOUD_PROJECT
+       - run:
+          name: Deploy
+          command: |
+            cd ~/src/github.com/ryu22e/tw-archives
+            export GOROOT=/google-cloud-sdk/platform/google_appengine/goroot-1.8
+            export GOPATH="/go:${HOME}"
+            gcloud -q app deploy app.yaml
+            gcloud -q app deploy cron.yaml
+            gcloud -q app deploy queue.yaml
+       - run:
+          name: Health check
+          command: |
+            wget --spider https://tw-archives.appspot.com/healthcheck
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
