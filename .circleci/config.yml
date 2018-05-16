@@ -9,8 +9,7 @@ jobs:
      docker:
        - image: circleci/golang:1.8
      steps:
-       - attach_workspace:
-          at: ~/src/github.com/ryu22e/tw-archives
+       - checkout
        - run:
           name: Install dep
           command: |
@@ -31,6 +30,7 @@ jobs:
      docker:
        - image: google/cloud-sdk:alpine
      steps:
+       - checkout
        - run:
           name: Install git openssh-client tar
           command: apk --update -q add git openssh-client tar
@@ -56,14 +56,12 @@ jobs:
      docker:
        - image: google/cloud-sdk:alpine
      steps:
-       - attach_workspace:
-          at: ~/src/github.com/ryu22e/tw-archives
+       - checkout
        - run:
           name: Install git openssh-client tar
           command: apk --update -q add git openssh-client tar
        - restore_cache:
           keys:
-            - tw-archives-{{ arch }}-{{ .Revision }}
             - go-src-{{ arch }}-{{ .Revision }}
        - run:
           name: Setup Google Cloud SDK
