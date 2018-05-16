@@ -14,7 +14,13 @@ func HandleNotFound(w http.ResponseWriter, r *http.Request) {
 
 // IndexHandler provides top page.
 func IndexHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	w.WriteHeader(200)
+	tmpl := template.Must(
+		template.New("").ParseFiles(
+			"templates/base.tmpl",
+			"templates/index.tmpl",
+		),
+	)
+	tmpl.ExecuteTemplate(w, "base", nil)
 }
 
 // HealthCheckHandler provides healthcheck page.
