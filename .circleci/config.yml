@@ -52,7 +52,7 @@ jobs:
             export PATH=${PATH}:${GOROOT}/bin:/go/bin
             ./goapp.test.sh
        - run:
-          name: send coverage to codecov
+          name: Send coverage to codecov
           command: |
             cd ~/src/github.com/ryu22e/tw-archives
             bash <(curl -s https://codecov.io/bash)
