@@ -27,3 +27,5 @@ skip_files:
 - vendor/.*$
 - LICENSE
 - README\.md
+- (go|goapp)\.test\.sh
+- coverage\.txt
