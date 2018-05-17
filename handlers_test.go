@@ -63,6 +63,6 @@ func TestHealthCheckHandler(t *testing.T) {
 	res := httptest.NewRecorder()
 	HealthCheckHandler(res, req, nil)
 	if res.Code != http.StatusNoContent {
-		t.Errorf("Status is not StatusNoContent: %d", res.Code)
+		t.Errorf("Status is not NoContent: %d", res.Code)
 	}
 }
