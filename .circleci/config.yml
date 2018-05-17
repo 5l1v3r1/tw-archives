@@ -50,7 +50,12 @@ jobs:
             export GOROOT=/google-cloud-sdk/platform/google_appengine/goroot-1.8
             export GOPATH="/go:${HOME}"
             export PATH=${PATH}:${GOROOT}/bin:/go/bin
-            goapp test
+            ./goapp.test.sh
+       - run:
+          name: send coverage to codecov
+          command: |
+            cd ~/src/github.com/ryu22e/tw-archives
+            bash <(curl -s https://codecov.io/bash)
    deploy:
      <<: *defaults
      docker:

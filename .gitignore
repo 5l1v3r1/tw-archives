@@ -17,3 +17,6 @@ appengine-generated/
 
 # dep
 vendor/
+
+# codecov
+coverage.txt
