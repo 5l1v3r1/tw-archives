@@ -27,3 +27,8 @@ func IndexHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 func HealthCheckHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.WriteHeader(http.StatusNoContent)
 }
+
+// TwitterConnectHandler provides connecting to twitter.
+func TwitterConnectHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	w.WriteHeader(200)
+}
