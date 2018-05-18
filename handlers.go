@@ -1,10 +1,17 @@
 package main
 
 import (
+	"github.com/garyburd/go-oauth/oauth"
 	"github.com/julienschmidt/httprouter"
 	"html/template"
 	"net/http"
 )
+
+var oauthClient = oauth.Client{
+	TemporaryCredentialRequestURI: "https://api.twitter.com/oauth/request_token",
+	ResourceOwnerAuthorizationURI: "https://api.twitter.com/oauth/authorize",
+	TokenRequestURI:               "https://api.twitter.com/oauth/access_token",
+}
 
 // HandleNotFound is a handler for 404 not found.
 func HandleNotFound(w http.ResponseWriter, r *http.Request) {
