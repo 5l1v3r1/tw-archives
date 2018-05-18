@@ -30,5 +30,5 @@ func HealthCheckHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 
 // TwitterConnectHandler provides connecting to twitter.
 func TwitterConnectHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	w.WriteHeader(200)
+	http.Redirect(w, r, "dummy", http.StatusFound)
 }

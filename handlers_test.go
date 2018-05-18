@@ -82,7 +82,7 @@ func TestTwitterConnect(t *testing.T) {
 	res := httptest.NewRecorder()
 	TwitterConnectHandler(res, req, nil)
 
-	if res.Code != http.StatusOK {
-		t.Errorf("Status is not OK: %d", res.Code)
+	if res.Code != http.StatusFound {
+		t.Errorf("Status is not Found: %d", res.Code)
 	}
 }
