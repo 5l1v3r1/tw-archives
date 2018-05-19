@@ -20,6 +20,9 @@ handlers:
 
 nobuild_files: vendor/
 
+includes:
+- env.yaml
+
 skip_files:
 - Gopkg\.toml
 - Gopkg\.lock

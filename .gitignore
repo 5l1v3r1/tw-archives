@@ -20,3 +20,6 @@ vendor/
 
 # codecov
 coverage.txt
+
+# app.yaml
+env.yaml
